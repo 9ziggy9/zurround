@@ -1,0 +1,15 @@
+{
+  "name": "zurround",
+  "version": "1.0.0",
+  "description": "* zurround Part of a larger project to make a quality reusable \"multiplexer\" for viewing microservices (i.e. containerized applications) in the browser. ** Desired Features - In viewport containers which behave like floating/scalable/movable windows in typical desktop environments.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "typescript": "^5.3.2"
+  }
+}

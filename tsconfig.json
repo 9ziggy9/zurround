@@ -1,0 +1,22 @@
+{
+    "include": [
+        "./src/**/*",
+    ],
+    "compilerOptions": {
+        "target": "ES2019",
+        "module": "es6",
+        "lib": ["ES2019", "DOM"],
+        "rootDir": "./src",
+        "typeRoots": ["./node_modules/@types"],
+        "outDir": "./dist",
+        "esModuleInterop": true,
+        "forceConsistentCasingInFileNames": true,
+        "strict": true,
+        "noImplicitAny": true,
+        "strictNullChecks": true,
+        "strictFunctionTypes": true,
+        "noImplicitThis": true,
+        "noImplicitReturns": true,
+        // "skipLibCheck": true
+    }
+}
