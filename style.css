@@ -5,12 +5,12 @@
 */
 
 :root {
-    --c64-black:      #000000; --c64-white:       #FFFFFF; --c64-red:        #68372B;
-    --c64-cyan:       #70A4B2; --c64-purple:      #6F3D86; --c64-green:      #588D43;
-    --c64-blue:       #352879; --c64-yellow:      #B8C76F; --c64-orange:     #6F4F25;
-    --c64-brown:      #433900; --c64-light-red:   #9A6759; --c64-dark-grey:  #444444;
-    --c64-grey:       #6C6C6C; --c64-light-green: #9AD284; --c64-light-blue: #6C5EB5;
-    --c64-light-grey: #959595;
+    --custom-black:      #000000; --custom-white:       #FFFFFF; --custom-red:        #68372B;
+    --custom-cyan:       #70A4B2; --custom-purple:      #6F3D86; --custom-green:      #588D43;
+    --custom-blue:       #352879; --custom-yellow:      #B8C76F; --custom-orange:     #6F4F25;
+    --custom-brown:      #433900; --custom-light-red:   #9A6759; --custom-dark-grey:  #444444;
+    --custom-grey:       #6C6C6C; --custom-light-green: #9AD284; --custom-light-blue: #6C5EB5;
+    --custom-light-grey: #959595;
 }
 
 * {
@@ -23,20 +23,20 @@
 }
 
 body, html {
-      background-color: var(--c64-blue);
-      color: var(--c64-white);
+      background-color: var(--custom-blue);
+      color: var(--custom-white);
 }
 
 .frame {
     position: absolute;
-    border: 2px solid var(--c64-white);
-    box-shadow: 3px 3px 10px var(--c64-dark-grey);
+    border: 2px solid var(--custom-white);
+    box-shadow: 3px 3px 10px var(--custom-dark-grey);
 }
 
 .frame-header {
-    background-color: var(--c64-light-blue);
+    background-color: var(--custom-light-blue);
     margin: 0;
-    color: var(--c64-cyan);
+    color: var(--custom-cyan);
     height: 1em;
     padding: 0.1em;
     padding-left: 0.3em;
@@ -44,13 +44,13 @@ body, html {
 }
 
 .frame-entry {
-    background-color: var(--my-blue);
+    background-color: var(--custom-blue);
     padding: 2em;
 }
 
 footer {
-    color: var(--c64-white);
-    background-color: var(--c64-light-blue);
+    color: var(--custom-white);
+    background-color: var(--custom-light-blue);
     height: 1.5em;
     text-align: center;
     position: fixed;
