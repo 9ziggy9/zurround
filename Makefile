@@ -1,5 +1,7 @@
+TSX_FLAGS=--listEmittedFiles --listFiles
 TSX_CMD=npx tsc
-SRV_CMD=python3 -m http.server --directory ./dist
+BUILD_DIR=./dist
+SRV_CMD=python3 -m http.server 1337 --directory
 
 # COLOR ALIASES
 RED=\033[31m
@@ -17,14 +19,18 @@ define print_in_color
 	@printf "\033[0m"
 endef
 
-run: build
-	$(call print_in_color, $(GREEN), MAKE: BUILD SUCCESS ...)
-	$(call print_in_color, $(GREEN), MAKE: starting server ...)
-	$(SRV_CMD)
-
 build:
-	$(call print_in_color, $(GREEN), MAKE: compiling tsx...)
-	$(TSX_CMD)
+	$(call print_in_color, $(GREEN), MAKE: compiling tsx...\n)
+	$(call print_in_color, $(YELLOW), >> CMD: $(TSX_CMD)\n)
+	@$(TSX_CMD)
+	cp ./index.html $(BUILD_DIR)
+	cp ./style.css $(BUILD_DIR)
+
+run: build
+	$(call print_in_color, $(GREEN), MAKE: BUILD SUCCESS ...\n)
+	$(call print_in_color, $(GREEN), MAKE: starting server ...\n)
+	$(SRV_CMD) $(BUILD_DIR)
 
 clean:
+	$(call print_in_color, $(YELLOW), MAKE: Cleaning ...\n)
 	rm -rf ./dist
