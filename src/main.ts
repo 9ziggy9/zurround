@@ -1,3 +1,11 @@
+type FrameSpecification = {
+  content: HTMLElement;
+  headerText?: string;
+  x?: number; y?: number;
+  w?: number | string;
+  h?: number | string;
+}
+
 type Frame = {
   id: `frame-${number}`;
   ref: HTMLDivElement;
@@ -7,7 +15,7 @@ type Frame = {
 
 interface FrameHandler {
   frames: {[id: Frame["id"]]: Frame};
-  new:    (x: Frame["x"], y: Frame["y"]) => Frame["id"];
+  new:    (s: FrameSpecification) => Frame["id"];
 };
 
 function initFrameHandler(): FrameHandler {
@@ -21,6 +29,20 @@ function initFrameHandler(): FrameHandler {
     return gapIdx !== -1
       ? `frame-${gapIdx + 1}`
       : `frame-${Object.keys(__frames).length + 1}`;
+  }
+
+  function __attachBaseAttributes(
+    div: HTMLDivElement, id: Frame["id"],
+    x: number, y: number,
+    w: number | string,
+    h: number | string,
+  ): void {
+    div.setAttribute("class", "frame");
+    div.style.left = `${x}px`;
+    div.style.top  = `${y}px`
+    div.style.width = `${w}`;
+    div.style.height = `${h}`
+    div.setAttribute("id", id);
   }
 
   function __attachFloatingLogic(div: HTMLDivElement): void {
@@ -45,31 +67,42 @@ function initFrameHandler(): FrameHandler {
     return header;
   }
 
-  function __generateFrameContent(): HTMLDivElement {
+  function __generateFrameContent(contentElement: HTMLElement): HTMLDivElement {
     const content = document.createElement("div");
     if (!content) throw new Error("Failed to generate content.");
     content.setAttribute("class", "frame-entry");
-    content.innerText = "Testing Window Content";
+    content.appendChild(contentElement);
     return content;
   }
 
-  function __newFrameAtPosition(
-    x: Frame["x"],
-    y: Frame["y"],
-    headerText?: string,
-  ): Frame["id"] {
+  function __extractSpecsOrDefault(s: FrameSpecification): {
+    x: number, y: number, w: number | string, h: number | string,
+    headerText: string,
+  }{
+    let {x, y, headerText, w, h} = s;
+    return {
+      x: x === undefined ? 0 : x,
+      y: y === undefined ? 0 : y,
+      w: w === undefined ? "25vw": w,
+      h: h === undefined ? "10vh": h,
+      headerText: headerText === undefined ? "" : headerText,
+    };
+  }
+
+  function __newFrameAtPosition(spec: FrameSpecification): Frame["id"] {
+    let {x, y, w, h, headerText} = __extractSpecsOrDefault(spec);
     const newFrameDiv = document.createElement("div");
+
     if (!newFrameDiv) throw new Error("Failed to create new frame.");
-    __attachFloatingLogic(newFrameDiv);
+
     const newFrameId  = __newIdentifier();
-    newFrameDiv.setAttribute("class", "frame");
-    newFrameDiv.style.left = `${x}px`;
-    newFrameDiv.style.top  = `${y}px`
-    newFrameDiv.setAttribute("id", newFrameId);
+
+    __attachBaseAttributes(newFrameDiv, newFrameId, x, y, w, h);
+    __attachFloatingLogic(newFrameDiv);
 
     newFrameDiv.append(
       __generateFrameHeader(headerText || newFrameId),
-      __generateFrameContent(),
+      __generateFrameContent(spec.content),
     );
 
     __frames[newFrameId] = {
@@ -86,13 +119,39 @@ function initFrameHandler(): FrameHandler {
 
   return {
     frames: __frames,
-    new:    (x, y)  => __newFrameAtPosition(x,y),
+    new:    (s: FrameSpecification)  => __newFrameAtPosition(s),
   };
 }
 
 function main(): void {
   const fh: FrameHandler = initFrameHandler();
-  fh.new(0,0);
+
+  const newWinContent = document.createElement("div");
+  newWinContent.innerHTML = "<h3>Hello, Content!</h3>"
+
+  const new2 = document.createElement("div");
+  new2.innerHTML = "<h3>content2</h3>"
+
+  const new3 = document.createElement("div");
+  new3.innerHTML = "<h3>yeah yeah</h3>"
+
+  fh.new({
+    content: newWinContent,
+    x: 0,
+    y: 0,
+  });
+  fh.new({
+    content: new2,
+    x: 100,
+    y: 300,
+  });
+  fh.new({
+    content: new3,
+    x: 200,
+    y: 300,
+    w: "200px",
+    h: "400px",
+  });
 }
 
 window.onload = main;

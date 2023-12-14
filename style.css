@@ -31,6 +31,7 @@ body, html {
     position: absolute;
     border: 2px solid var(--custom-white);
     box-shadow: 3px 3px 10px var(--custom-dark-grey);
+    overflow: hidden;
 }
 
 .frame-header {
