@@ -2,3 +2,4 @@
 Part of a larger project to make a quality reusable "multiplexer" for viewing microservices (i.e. containerized applications) in the browser.
 ** Desired Features
 - In viewport containers which behave like floating/scalable/movable windows in typical desktop environments.
+- Notion of taskbar--ability to minimize, fullsize windows.
