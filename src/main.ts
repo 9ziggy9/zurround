@@ -45,8 +45,12 @@ function initFrameHandler(): FrameHandler {
     div.setAttribute("id", id);
   }
 
-  function __attachFloatingLogic(div: HTMLDivElement): void {
-    div.onmousedown = function(e) {
+  function __attachHeaderClickLogic(div: HTMLDivElement): void {
+    const header = div.children[0] as HTMLElement;
+    if (!header) throw new Error("__attachFloatingLogic(): no header div found.");
+
+    header.onmousedown = function(e) {
+      e.stopPropagation();
       const dx: number = e.clientX - div.getBoundingClientRect().left;
       const dy: number = e.clientY - div.getBoundingClientRect().top;
       document.onmousemove = function(e) {
@@ -56,6 +60,33 @@ function initFrameHandler(): FrameHandler {
       document.onmouseup = function () {
         document.onmousemove = document.onmouseup = null;
       };
+    }
+  }
+
+  const isWithinCorner = (
+    cW: number, cH: number,
+    x: number, y: number
+  ): boolean => x >= 0 && x <= cW && y >= 0 && y <= cH;
+
+  function __attachCornerClickLogic(div: HTMLDivElement): void {
+    div.onmousedown = function(e) {
+      const relX = div.getBoundingClientRect().right - e.clientX;
+      const relY = div.getBoundingClientRect().bottom - e.clientY;
+      const pseudoCorner = getComputedStyle(div, ":after");
+      // slice is to remove px from string
+      const pW = Number(pseudoCorner.getPropertyValue("width").slice(0,-2));
+      const pH = Number(pseudoCorner.getPropertyValue("height").slice(0,-2));
+      document.onmousemove = function(e) {
+        if (isWithinCorner(pW, pH, relX, relY)) {
+          const newW = e.clientX - div.getBoundingClientRect().left;
+          const newH = e.clientY - div.getBoundingClientRect().top;
+          div.style.width  = `${newW}px`;
+          div.style.height = `${newH}px`;
+        }
+      }
+      document.onmouseup = function () {
+        document.onmousemove = document.onmouseup = null;
+      }
     }
   }
 
@@ -98,12 +129,14 @@ function initFrameHandler(): FrameHandler {
     const newFrameId  = __newIdentifier();
 
     __attachBaseAttributes(newFrameDiv, newFrameId, x, y, w, h);
-    __attachFloatingLogic(newFrameDiv);
 
     newFrameDiv.append(
       __generateFrameHeader(headerText || newFrameId),
       __generateFrameContent(spec.content),
     );
+
+    __attachHeaderClickLogic(newFrameDiv);
+    __attachCornerClickLogic(newFrameDiv);
 
     __frames[newFrameId] = {
       x, y,

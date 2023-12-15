@@ -34,6 +34,16 @@ body, html {
     overflow: hidden;
 }
 
+.frame::after {
+    content: "";
+    position: absolute;
+    width: 0.5em;
+    height: 0.5em;
+    right: 0;
+    bottom: 0;
+    cursor: nwse-resize;
+}
+
 .frame-header {
     background-color: var(--custom-light-blue);
     margin: 0;
